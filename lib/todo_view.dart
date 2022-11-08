@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 
 class TodoView extends StatelessWidget {
-  const TodoView(
-      {required this.title,
-      required this.date,
-      required this.content,
-      super.key});
-  final String title;
-  final DateTime date;
-  final String content;
+   TodoView({required this.change, super.key});
+  bool change;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,24 +19,28 @@ class TodoView extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(title,
+          children: const [
+            TextField(
+                decoration: InputDecoration(hintText: "Title"),
                 maxLines: 1,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            const SizedBox(
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            SizedBox(
               height: 40,
             ),
-            Text("$date",
+            TextField(
+                decoration: InputDecoration(hintText: "date"),
                 maxLines: 1,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                 )),
-            const SizedBox(
+            SizedBox(
               height: 40,
             ),
-            Text(content,
-                style: const TextStyle(
+            TextField(
+                maxLines: 10,
+                decoration: InputDecoration(
+                    hintText: "content", border: InputBorder.none),
+                style: TextStyle(
                   fontSize: 18,
                 ))
           ],
@@ -78,10 +77,10 @@ class TodoView extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const Icon(
-                Icons.edit,
-                size: 32,
-              ),
+              icon: change is true ? Icon(
+                 Icons.edit) : Icon(Icons.check_circle_outline),
+               
+              
               onPressed: () {},
             ),
           ],
