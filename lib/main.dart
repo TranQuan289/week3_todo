@@ -16,8 +16,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) =>
-                TodoBloc()..add(const LoadTodos(todos: listTodo))),
+            create: (context) => TodoBloc()..add(LoadTodos(todos: listTodo))),
       ],
       child: const MaterialApp(
           debugShowCheckedModeBanner: false,

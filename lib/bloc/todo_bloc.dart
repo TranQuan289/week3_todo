@@ -19,9 +19,36 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     emit(ToDoLoaded(todos: event.todos));
   }
 
-  FutureOr<void> _onAddTodo(AddTodo event, Emitter<TodoState> emit) {}
+  FutureOr<void> _onAddTodo(AddTodo event, Emitter<TodoState> emit) {
+    final state = this.state;
+    if (state is ToDoLoaded) {
+      emit(ToDoLoaded(todos: List.from(state.todos)..add(event.todo)));
+    }
+  }
 
-  FutureOr<void> _onUpdateTodo(UpdateTodo event, Emitter<TodoState> emit) {}
+  FutureOr<void> _onUpdateTodo(UpdateTodo event, Emitter<TodoState> emit) {
+    // final state = this.state;
+    // if (state is ToDoLoaded) {
+    //   List<Todo> todos = state.todos.where((todo) {
+    //     if(todo.id == event.todo.id){
+    //       re
+    //     }
+    //   }).toList();
+    //   emit(
+    //     ToDoLoaded(todos: todos),
+    //   );
+    // }
+  }
 
-  FutureOr<void> _onDeleteTodo(DeleteTodo event, Emitter<TodoState> emit) {}
+  FutureOr<void> _onDeleteTodo(DeleteTodo event, Emitter<TodoState> emit) {
+    final state = this.state;
+    if (state is ToDoLoaded) {
+      List<Todo> todos = state.todos.where((todo) {
+        return todo.id != event.todo.id;
+      }).toList();
+      emit(
+        ToDoLoaded(todos: todos),
+      );
+    }
+  }
 }

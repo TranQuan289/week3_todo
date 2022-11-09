@@ -1,11 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TodoView extends StatelessWidget {
-   TodoView({required this.change, super.key});
+import 'bloc/todo_bloc.dart';
+import 'model/todo_model.dart';
+
+// ignore: must_be_immutable
+class TodoView extends StatefulWidget {
+  TodoView({required this.change, required this.todo, super.key});
   bool change;
+  Todo todo;
+
+  @override
+  State<TodoView> createState() => _TodoViewState();
+}
+
+class _TodoViewState extends State<TodoView> {
+  TextEditingController titleController = TextEditingController();
+
+  TextEditingController dateController = TextEditingController();
+
+  TextEditingController contentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    bool isButtonDisabled = false;
+    if (widget.change) {
+      titleController.text = widget.todo.title;
+      dateController.text = widget.todo.date;
+      contentController.text = widget.todo.content;
+    }
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
@@ -15,35 +38,49 @@ class TodoView extends StatelessWidget {
             },
             icon: const Icon(Icons.arrow_back_ios_rounded, color: Colors.black),
           )),
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: const [
-            TextField(
-                decoration: InputDecoration(hintText: "Title"),
-                maxLines: 1,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 40,
-            ),
-            TextField(
-                decoration: InputDecoration(hintText: "date"),
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: 18,
-                )),
-            SizedBox(
-              height: 40,
-            ),
-            TextField(
-                maxLines: 10,
-                decoration: InputDecoration(
-                    hintText: "content", border: InputBorder.none),
-                style: TextStyle(
-                  fontSize: 18,
-                ))
-          ],
+      body: BlocListener<TodoBloc, TodoState>(
+        listener: (context, state) {},
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextField(
+                  enabled: isButtonDisabled,
+                  controller: titleController,
+                  decoration: const InputDecoration(
+                    hintText: "Title",
+                  ),
+                  maxLines: 1,
+                  style: const TextStyle(
+                      fontSize: 24, fontWeight: FontWeight.bold)),
+              const SizedBox(
+                height: 40,
+              ),
+              Focus(
+                child: TextField(
+                    controller: dateController,
+                    decoration: const InputDecoration(hintText: "date"),
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    )),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Focus(
+                child: TextField(
+                    controller: contentController,
+                    maxLines: 10,
+                    decoration: const InputDecoration(
+                        hintText: "content", border: InputBorder.none),
+                    style: const TextStyle(
+                      fontSize: 18,
+                    )),
+              )
+            ],
+          ),
         ),
       ),
       bottomSheet: Container(
@@ -61,7 +98,17 @@ class TodoView extends StatelessWidget {
                 color: Colors.red,
                 size: 32,
               ),
-              onPressed: () {},
+              onPressed: widget.change
+                  ? () {
+                      context
+                          .read<TodoBloc>()
+                          .add(DeleteTodo(todo: widget.todo));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Delete Complete")),
+                      );
+                      Navigator.pop(context);
+                    }
+                  : null,
             ),
             Ink(
               decoration: const ShapeDecoration(
@@ -73,15 +120,40 @@ class TodoView extends StatelessWidget {
                   Icons.add,
                   color: Colors.white,
                 ),
-                onPressed: () {},
+                onPressed: widget.change
+                    ? () {
+                        titleController.text = "";
+                        dateController.text = "";
+                        contentController.text = "";
+                        setState(() {
+                          isButtonDisabled = !isButtonDisabled;
+                          widget.change = false;
+                        });
+                      }
+                    : null,
               ),
             ),
             IconButton(
-              icon: change is true ? Icon(
-                 Icons.edit) : Icon(Icons.check_circle_outline),
-               
-              
-              onPressed: () {},
+              icon: widget.change
+                  ? const Icon(Icons.edit)
+                  : const Icon(Icons.check_circle_outline),
+              onPressed: widget.change
+                  ? () {
+                      setState(() {
+                        widget.change = false;
+                      });
+                    }
+                  : (() {
+                      var todo = Todo(
+                          title: titleController.text,
+                          date: dateController.text,
+                          content: contentController.text);
+
+                      context.read<TodoBloc>().add(AddTodo(todo: todo));
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Add Complete")));
+                    }),
             ),
           ],
         ),
