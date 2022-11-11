@@ -22,18 +22,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   FutureOr<void> _onAddTodo(AddTodo event, Emitter<TodoState> emit) {
     final state = this.state;
     if (state is ToDoLoaded) {
-      emit(ToDoLoaded(todos: List.from(state.todos)..add(event.todo)));
+      emit(ToDoLoaded(todos: List.from(state.todos)..insert(0, event.todo)));
     }
   }
 
   FutureOr<void> _onUpdateTodo(UpdateTodo event, Emitter<TodoState> emit) {
     // final state = this.state;
     // if (state is ToDoLoaded) {
-    //   List<Todo> todos = state.todos.where((todo) {
-    //     if(todo.id == event.todo.id){
-    //       re
-    //     }
-    //   }).toList();
+    //   List<Todo> todos = List.from(state.todos)
+    //     ..remove(event.todo.id)
+    //     ..insert(0, event.todo);
     //   emit(
     //     ToDoLoaded(todos: todos),
     //   );
@@ -44,7 +42,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     final state = this.state;
     if (state is ToDoLoaded) {
       List<Todo> todos = state.todos.where((todo) {
-        return todo.id != event.todo.id;
+        return event.todo.id != todo.id;
       }).toList();
       emit(
         ToDoLoaded(todos: todos),
