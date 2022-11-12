@@ -77,7 +77,7 @@ class _TodoViewState extends State<TodoView> {
               TextField(
                   readOnly: isButtonDisabled,
                   controller: contentController,
-                  maxLines: 20,
+                  maxLines: 18,
                   decoration: const InputDecoration(
                       hintText: "content", border: InputBorder.none),
                   style: const TextStyle(

@@ -33,7 +33,7 @@ class TodoHome extends StatelessWidget {
                 const Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: EdgeInsets.all(18),
+                    padding: EdgeInsets.all(10),
                     child: TextField(
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search),

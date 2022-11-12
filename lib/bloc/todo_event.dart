@@ -23,14 +23,6 @@ class AddTodo extends TodoEvent {
   List<Object> get props => [todo];
 }
 
-class UpdateTodo extends TodoEvent {
-  final Todo todo;
-  const UpdateTodo({required this.todo});
-
-  @override
-  List<Object> get props => [todo];
-}
-
 class DeleteTodo extends TodoEvent {
   final Todo todo;
   const DeleteTodo({required this.todo});

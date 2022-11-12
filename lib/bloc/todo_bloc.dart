@@ -11,7 +11,6 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   TodoBloc() : super(TodoLoading()) {
     on<LoadTodos>(_onLoadTodos);
     on<AddTodo>(_onAddTodo);
-    on<UpdateTodo>(_onUpdateTodo);
     on<DeleteTodo>(_onDeleteTodo);
   }
 
@@ -24,18 +23,6 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     if (state is ToDoLoaded) {
       emit(ToDoLoaded(todos: List.from(state.todos)..insert(0, event.todo)));
     }
-  }
-
-  FutureOr<void> _onUpdateTodo(UpdateTodo event, Emitter<TodoState> emit) {
-    // final state = this.state;
-    // if (state is ToDoLoaded) {
-    //   List<Todo> todos = List.from(state.todos)
-    //     ..remove(event.todo.id)
-    //     ..insert(0, event.todo);
-    //   emit(
-    //     ToDoLoaded(todos: todos),
-    //   );
-    // }
   }
 
   FutureOr<void> _onDeleteTodo(DeleteTodo event, Emitter<TodoState> emit) {
