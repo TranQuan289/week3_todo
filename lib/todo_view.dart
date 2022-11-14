@@ -17,18 +17,14 @@ class TodoView extends StatefulWidget {
 class _TodoViewState extends State<TodoView> {
   bool replace = true;
   bool isButtonDisabled = true;
-  TextEditingController titleController = TextEditingController();
-
-  TextEditingController dateController = TextEditingController();
-
-  TextEditingController contentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<TodoBloc>();
     if (widget.change) {
-      titleController.text = widget.todo.title;
-      dateController.text = widget.todo.date;
-      contentController.text = widget.todo.content;
+      bloc.titleController.text = widget.todo.title;
+      bloc.dateController.text = widget.todo.date;
+      bloc.contentController.text = widget.todo.content;
     } else {
       setState(() {
         isButtonDisabled = false;
@@ -47,43 +43,46 @@ class _TodoViewState extends State<TodoView> {
         listener: (context, state) {},
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                  readOnly: isButtonDisabled,
-                  controller: titleController,
-                  decoration: const InputDecoration(
-                    hintText: "Title",
-                  ),
-                  maxLines: 1,
-                  style: const TextStyle(
-                      fontSize: 24, fontWeight: FontWeight.bold)),
-              const SizedBox(
-                height: 40,
-              ),
-              TextField(
-                  keyboardType: TextInputType.datetime,
-                  readOnly: isButtonDisabled,
-                  controller: dateController,
-                  decoration: const InputDecoration(hintText: "date"),
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 18,
-                  )),
-              const SizedBox(
-                height: 40,
-              ),
-              TextField(
-                  readOnly: isButtonDisabled,
-                  controller: contentController,
-                  maxLines: 18,
-                  decoration: const InputDecoration(
-                      hintText: "content", border: InputBorder.none),
-                  style: const TextStyle(
-                    fontSize: 18,
-                  ))
-            ],
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TextField(
+                    readOnly: isButtonDisabled,
+                    controller: bloc.titleController,
+                    decoration: const InputDecoration(
+                      hintText: "Title",
+                    ),
+                    maxLines: 1,
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold)),
+                const SizedBox(
+                  height: 40,
+                ),
+                TextField(
+                    keyboardType: TextInputType.datetime,
+                    readOnly: isButtonDisabled,
+                    controller: bloc.dateController,
+                    decoration: const InputDecoration(hintText: "date"),
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 18,
+                    )),
+                const SizedBox(
+                  height: 40,
+                ),
+                TextField(
+                    readOnly: isButtonDisabled,
+                    controller: bloc.contentController,
+                    maxLines: 18,
+                    decoration: const InputDecoration(
+                        hintText: "content", border: InputBorder.none),
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ))
+              ],
+            ),
           ),
         ),
       ),
@@ -126,9 +125,9 @@ class _TodoViewState extends State<TodoView> {
                 ),
                 onPressed: widget.change
                     ? () {
-                        titleController.text = "";
-                        dateController.text = "";
-                        contentController.text = "";
+                        bloc.titleController.text = "";
+                        bloc.dateController.text = "";
+                        bloc.contentController.text = "";
                         setState(() {
                           isButtonDisabled = !isButtonDisabled;
                           widget.change = false;
@@ -152,9 +151,9 @@ class _TodoViewState extends State<TodoView> {
                   : (() {
                       if (replace) {
                         var todo = Todo(
-                            title: titleController.text,
-                            date: dateController.text,
-                            content: contentController.text);
+                            title: bloc.titleController.text,
+                            date: bloc.dateController.text,
+                            content: bloc.contentController.text);
                         replace = false;
                         context.read<TodoBloc>().add(AddTodo(todo: todo));
                         Navigator.pop(context);
@@ -162,9 +161,9 @@ class _TodoViewState extends State<TodoView> {
                             const SnackBar(content: Text("Add Complete")));
                       } else {
                         var todo = Todo(
-                            title: titleController.text,
-                            date: dateController.text,
-                            content: contentController.text);
+                            title: bloc.titleController.text,
+                            date: bloc.dateController.text,
+                            content: bloc.contentController.text);
                         replace = false;
                         context
                             .read<TodoBloc>()

@@ -1,7 +1,6 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:week3_todoapp/model/todo_model.dart';
 
 part 'todo_event.dart';
@@ -14,6 +13,11 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<DeleteTodo>(_onDeleteTodo);
     //on<UpdateTodo>(_onUpdateTodo);
   }
+  TextEditingController titleController = TextEditingController();
+
+  TextEditingController dateController = TextEditingController();
+
+  TextEditingController contentController = TextEditingController();
 
   _onLoadTodos(LoadTodos event, Emitter<TodoState> emit) {
     emit(ToDoLoaded(todos: event.todos));
