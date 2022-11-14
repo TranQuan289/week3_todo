@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "900166280989",
+    "project_id": "messaging-bc7c2",
+    "storage_bucket": "messaging-bc7c2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:900166280989:android:6951c3d1d699b5dbcb23f4",
+        "android_client_info": {
+          "package_name": "com.example.week3_todoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "900166280989-ecovoi4tmql043rdh6bqmr4c0p31ip92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDNZ9cbJtlnJvzL-YQRthCKxmTRr4YkjQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "900166280989-ecovoi4tmql043rdh6bqmr4c0p31ip92.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
